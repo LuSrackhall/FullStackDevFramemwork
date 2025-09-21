@@ -12,7 +12,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func ServerRun() {
+func ServerRun() int {
 
 	// 启动gin
 	r := gin.Default()
@@ -114,7 +114,7 @@ func ServerRun() {
 			listener, err = net.Listen("tcp", "localhost:0")
 			if err != nil {
 				logger.Error("无法启动服务:", err)
-				return
+				return -1
 			}
 		}
 
@@ -159,10 +159,11 @@ func ServerRun() {
 		isReady := <-ready
 		if !isReady {
 			fmt.Println("SDK的本地server模块启动失败")
-			return
+			return -1
 		}
 		// 输出端口信息，让Electron主进程可以捕获
 		fmt.Printf("KEYTONE_PORT=%d\n", port)
+		return port
 	}
 
 }
