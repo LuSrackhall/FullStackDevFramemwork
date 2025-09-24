@@ -1,2 +1,7 @@
 *.db
 *.jsonl
+
+full/spa/
+
+command-line-tools
+log-adaptor
