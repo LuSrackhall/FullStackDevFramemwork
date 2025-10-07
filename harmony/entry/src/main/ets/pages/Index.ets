@@ -1,5 +1,5 @@
 import { hilog } from '@kit.PerformanceAnalysisKit';
-import testNapi from 'libentry.so';
+import napi from 'libentry.so';
 
 const DOMAIN = 0x0000;
 
@@ -16,7 +16,8 @@ struct Index {
           .fontWeight(FontWeight.Bold)
           .onClick(() => {
             this.message = 'Welcome';
-            hilog.info(DOMAIN, 'testTag', 'Test NAPI 2 + 3 = %{public}d', testNapi.add(2, 3));
+            hilog.info(DOMAIN, 'testTag', 'Test NAPI napi.add 2 + 3 = %{public}d', napi.add(2.0, 3.0));
+            hilog.info(DOMAIN, 'testTag', 'Test NAPI napi.hello %{public}s', napi.hello());
           })
       }
       .width('100%')

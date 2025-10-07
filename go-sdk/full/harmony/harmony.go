@@ -10,7 +10,8 @@
 package main
 
 import "C"
-import "fmt"
+
+// import "fmt"
 
 //export Add
 func Add(x, y C.double) C.double {
@@ -19,7 +20,7 @@ func Add(x, y C.double) C.double {
 
 //export Hello
 func Hello() *C.char {
-	fmt.Println("LuSrackhall Hello")
+	// fmt.Println("LuSrackhall Hello")
 	return C.CString("Hello, HarmonyOS")
 }
 func main() {}
