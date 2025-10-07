@@ -3,8 +3,10 @@
 #include "string.h"
 #include "thread"
 #include "future"
+#include "memory"
 
 // 工具函数:从 napi_value 转换为 C 字符串
+// 注意:调用者负责释放返回的内存
 static char *value2String(napi_env env, napi_value value) {
     size_t len = 0;
     napi_get_value_string_utf8(env, value, nullptr, 0, &len);
@@ -27,19 +29,29 @@ static napi_value Add0(napi_env env, napi_callback_info info) {
     napi_get_value_double(env, args[0], &x);
     napi_get_value_double(env, args[1], &y);
     
-    // 使用 promise/future 在子线程中执行 Go 函数
-    std::promise<double> promise;
-    std::future<double> future = promise.get_future();
+    // 使用 shared_ptr 管理 promise,避免栈引用问题
+    auto promise_ptr = std::make_shared<std::promise<double>>();
+    std::future<double> future = promise_ptr->get_future();
     
-    std::thread t([&promise, x, y]() {
-        double sum = Add(x, y);
-        promise.set_value(sum);
+    std::thread t([promise_ptr, x, y]() {
+        try {
+            double sum = Add(x, y);
+            promise_ptr->set_value(sum);
+        } catch (...) {
+            promise_ptr->set_exception(std::current_exception());
+        }
     });
     t.join();
     
     // 获取结果并返回
-    double ret = future.get();
-    napi_create_double(env, ret, &result);
+    try {
+        double ret = future.get();
+        napi_create_double(env, ret, &result);
+    } catch (...) {
+        // 发生异常时返回 NaN
+        napi_create_double(env, 0.0, &result);
+    }
+    
     return result;
 }
 
@@ -47,19 +59,39 @@ static napi_value Add0(napi_env env, napi_callback_info info) {
 static napi_value Hello0(napi_env env, napi_callback_info info) {
     napi_value result;
     
-    // 使用 promise/future 在子线程中执行 Go 函数
-    std::promise<char*> promise;
-    std::future<char*> future = promise.get_future();
+    // 使用 shared_ptr 管理 promise,避免栈引用问题
+    auto promise_ptr = std::make_shared<std::promise<char*>>();
+    std::future<char*> future = promise_ptr->get_future();
     
-    std::thread t([&promise]() {
-        char* msg = Hello();
-        promise.set_value(msg);
+    std::thread t([promise_ptr]() {
+        try {
+            char* msg = Hello();
+            promise_ptr->set_value(msg);
+        } catch (...) {
+            promise_ptr->set_exception(std::current_exception());
+        }
     });
     t.join();
     
     // 获取结果并转换为 NAPI 字符串
-    char* msg = future.get();
-    napi_create_string_utf8(env, msg, strlen(msg), &result);
+    char* msg = nullptr;
+    try {
+        msg = future.get();
+        if (msg != nullptr) {
+            napi_create_string_utf8(env, msg, strlen(msg), &result);
+            // 释放 Go 分配的内存
+            free(msg);
+        } else {
+            napi_create_string_utf8(env, "", 0, &result);
+        }
+    } catch (...) {
+        // 发生异常时返回空字符串
+        napi_create_string_utf8(env, "", 0, &result);
+        if (msg != nullptr) {
+            free(msg);
+        }
+    }
+    
     return result;
 }
 
