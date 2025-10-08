@@ -16,8 +16,9 @@ struct Index {
           .fontWeight(FontWeight.Bold)
           .onClick(() => {
             this.message = 'Welcome';
-            hilog.info(DOMAIN, 'testTag', 'Test NAPI napi.add 2 + 3 = %{public}d', napi.add(2.0, 3.0));
-            hilog.info(DOMAIN, 'testTag', 'Test NAPI napi.hello %{public}s', napi.hello());
+            // hilog.info(DOMAIN, 'testTag', 'Test NAPI napi.add 2 + 3 = %{public}d', napi.add(2.0, 3.0));
+            // hilog.info(DOMAIN, 'testTag', 'Test NAPI napi.hello %{public}s', napi.hello());
+            hilog.info(DOMAIN, 'testTag', 'Test NAPI napi.hello %{public}d', napi.fullSdkRun("./","./"));
           })
       }
       .width('100%')

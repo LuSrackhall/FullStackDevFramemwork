@@ -5,9 +5,9 @@ import (
 	"io"
 	"net"
 	"net/http"
-	"test-go-sdk/logger"
-	"test-go-sdk/store"
 
+	"github.com/LuSrackhall/FullStackDevFramemwork/go-sdk/logger"
+	"github.com/LuSrackhall/FullStackDevFramemwork/go-sdk/store"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )

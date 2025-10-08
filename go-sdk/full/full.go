@@ -3,12 +3,13 @@ package full
 import (
 	"log/slog"
 	"os"
-	"test-go-sdk/logger"
-	"test-go-sdk/memory"
-	"test-go-sdk/server"
-	"test-go-sdk/utils"
+
 	"time"
 
+	"github.com/LuSrackhall/FullStackDevFramemwork/go-sdk/logger"
+	"github.com/LuSrackhall/FullStackDevFramemwork/go-sdk/memory"
+	"github.com/LuSrackhall/FullStackDevFramemwork/go-sdk/server"
+	"github.com/LuSrackhall/FullStackDevFramemwork/go-sdk/utils"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 )

@@ -4,8 +4,9 @@ import (
 	"flag"
 	"fmt"
 	"log/slog"
-	"test-go-sdk/full"
 	"time"
+
+	"github.com/LuSrackhall/FullStackDevFramemwork/go-sdk/full"
 )
 
 // 定义日志目录的路径的命令行参数

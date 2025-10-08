@@ -2,7 +2,8 @@ package utils
 
 import (
 	"os"
-	"test-go-sdk/logger"
+
+	"github.com/LuSrackhall/FullStackDevFramemwork/go-sdk/logger"
 )
 
 // 检查指定的路径是否存在(TIPS: 实际上这部分逻辑, 应该放在特定的需求函数之内才对)

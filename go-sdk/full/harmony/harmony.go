@@ -1,31 +1,21 @@
-// package main
-
-// import "test-go-sdk/full"
-
-// func FullSdkRun(LogDirPath string, DataBaseDirPath string) int {
-// 	return full.FullSdkRun(LogDirPath, DataBaseDirPath)
-// }
-// func main() {}
-
 package main
 
 import "C"
-import (
-	"fmt"
-	"log/slog"
-)
 
-// import "fmt"
+import "github.com/LuSrackhall/FullStackDevFramemwork/go-sdk/full"
 
-//export Add
-func Add(x, y C.double) C.double {
-	return x + y
+// func FullSdkRun(LogDirPath, DataBaseDirPath string) int {
+// 	return full.FullSdkRun(LogDirPath, DataBaseDirPath)
+// }
+
+//export FullSdkRun
+func FullSdkRun(logDirPath *C.char, dataBaseDirPath *C.char) C.int {
+	goLogDir := C.GoString(logDirPath)
+	goDBDir := C.GoString(dataBaseDirPath)
+
+	result := full.FullSdkRun(goLogDir, goDBDir)
+
+	return C.int(result)
 }
 
-//export Hello
-func Hello() *C.char {
-	fmt.Println("LuSrackhall Hello")
-	slog.Info("LuSrackhall Hello slog")
-	return C.CString("Hello, HarmonyOS")
-}
 func main() {}
