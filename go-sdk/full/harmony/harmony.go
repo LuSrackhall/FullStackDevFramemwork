@@ -10,6 +10,10 @@
 package main
 
 import "C"
+import (
+	"fmt"
+	"log/slog"
+)
 
 // import "fmt"
 
@@ -20,7 +24,8 @@ func Add(x, y C.double) C.double {
 
 //export Hello
 func Hello() *C.char {
-	// fmt.Println("LuSrackhall Hello")
+	fmt.Println("LuSrackhall Hello")
+	slog.Info("LuSrackhall Hello slog")
 	return C.CString("Hello, HarmonyOS")
 }
 func main() {}
